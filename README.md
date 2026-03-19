@@ -105,6 +105,26 @@ html = Scraper(cdp_url="http://127.0.0.1:9222").fetch(url, timeout=30)
 article = Parser().parse(html, url)
 ```
 
+### 方式四：Docker 部署
+
+构建镜像：
+
+```bash
+docker build -t wechat-scraper .
+```
+
+运行容器（通过 `CDP_URL` 环境变量指向宿主机 Chrome）：
+
+```bash
+# macOS / Windows（Docker Desktop）
+docker run -d -p 8000:8000 -e CDP_URL=http://host.docker.internal:9222 wechat-scraper
+
+# Linux（使用 host 网络模式）
+docker run -d --network host -e CDP_URL=http://127.0.0.1:9222 wechat-scraper
+```
+
+注意：Chrome 仍需在宿主机上以远程调试模式运行（参见前置条件），容器通过网络连接宿主机的 Chrome。
+
 ## Article 对象
 
 | 字段 | 类型 | 说明 |
