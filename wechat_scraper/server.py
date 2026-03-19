@@ -1,6 +1,7 @@
 """HTTP API 服务器模块。"""
 
 import logging
+import os
 from dataclasses import asdict
 
 from flask import Flask, jsonify, request
@@ -66,7 +67,8 @@ def create_app() -> Flask:
 
         # 6. 调用 scrape 并返回结果
         try:
-            article = scrape(url=data["url"], timeout=timeout)
+            cdp_url = os.environ.get("CDP_URL", "http://127.0.0.1:9222")
+            article = scrape(url=data["url"], cdp_url=cdp_url, timeout=timeout)
             return jsonify(asdict(article)), 200
         except ScrapeError as e:
             return jsonify(
